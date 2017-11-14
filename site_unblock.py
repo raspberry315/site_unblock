@@ -1,5 +1,4 @@
-
-m SocketServer import BaseRequestHandler, ThreadingTCPServer
+from SocketServer import BaseRequestHandler, ThreadingTCPServer
 from socket import *
 import time
 import string

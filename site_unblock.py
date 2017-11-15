@@ -19,13 +19,13 @@ class SockHandler(BaseRequestHandler):
         self.data = self.request.recv(1024)
         print '[+]Received Data From Client...\n\n'
         f = methodCheck(self.data)
-        
+     
         if(f):
             hostName = getHTTPHostName(self.data)
-            #print self.data
-            dummyRequest = 'GET / HTTP/1.1\r\nHost: dummy.com\r\n\r\n'
+            print self.data
+            dummyRequest = 'GET / HTTP/1.1\r\nHost: test.gilgil.net\r\n\r\n'
             self.data = dummyRequest + self.data
-            #print self.data
+            print self.data
             
             try:
                 sock = socket(AF_INET, SOCK_STREAM)
@@ -35,25 +35,27 @@ class SockHandler(BaseRequestHandler):
 
                 while(True):
                     received = sock.recv(4096)
+                    if received.count('HTTP/1.1') > 1:
+                        received = received[1:]
+                        idx = received.find('HTTP/1.1')
+                        received = received[idx:]
                     print '[+]Received Data From Server...\n\n'
-                    time.sleep(0.001)
+                    time.sleep(0.001)   
                     if not received:
-                        print '[+]No Data From Server...\n\n'
                         break
                     if 'HTTP/1.1 404 Not Found' in received:
                         print '[+]Response Has 404 Not Found...\n\n'
                         continue
                     self.request.sendall(received)
-                    print '[+]Send Response to Client...\n\n'
-                    
             except:
-                print 'Trying Connection...\n\n'
+                print "[+]Trying Connection...\n\n"
             finally:
                 sock.close()
+
 
 if __name__ == '__main__':
     proxy = ThreadingTCPServer(('127.0.0.1', 8081), SockHandler)
     proxy.stop_looping = False
     try: proxy.serve_forever()
-    except KeyboardInterrupt: print 'EXIT'
+    except KeyboardInterrupt: print 'ctrl+c'
     proxy.stop_looping = True

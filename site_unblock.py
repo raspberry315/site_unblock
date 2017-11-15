@@ -22,10 +22,10 @@ class SockHandler(BaseRequestHandler):
      
         if(f):
             hostName = getHTTPHostName(self.data)
-            print self.data
+			#print self.data
             dummyRequest = 'GET / HTTP/1.1\r\nHost: test.gilgil.net\r\n\r\n'
             self.data = dummyRequest + self.data
-            print self.data
+			#print self.data
             
             try:
                 sock = socket(AF_INET, SOCK_STREAM)
@@ -39,10 +39,9 @@ class SockHandler(BaseRequestHandler):
                         received = received[1:]
                         idx = received.find('HTTP/1.1')
                         received = received[idx:]
-                    print '[+]Received Data From Server...\n\n'
-                    time.sleep(0.001)   
-                    if not received:
-                        break
+                    print '[+]Receiving Data From Server...\n\n'
+                       
+                    if not received:break
                     if 'HTTP/1.1 404 Not Found' in received:
                         print '[+]Response Has 404 Not Found...\n\n'
                         continue

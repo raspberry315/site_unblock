@@ -42,9 +42,6 @@ class SockHandler(BaseRequestHandler):
                     print '[+]Receiving Data From Server...\n\n'
                        
                     if not received:break
-                    if 'HTTP/1.1 404 Not Found' in received:
-                        print '[+]Response Has 404 Not Found...\n\n'
-                        continue
                     self.request.sendall(received)
             except:
                 print "[+]Trying Connection...\n\n"
